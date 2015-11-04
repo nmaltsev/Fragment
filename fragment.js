@@ -3,18 +3,20 @@ Fragment compiler v3 16/10/2015
 Compile template string at DocumentFragment
 
 Examples:
-'> .test.tst2>a@href="http://ain.ua"$link>{hello <xyz>}<<span' 
-	<div><div class="test tst2"><a href="http://yandex.ru">hello &lt;xyz&gt;</a></div><span></span></div>
-'div  >  .test.tst2>a@href="http://yandex.ru"$link>{hello <xyz>}<<span'
-	<div><div class="test tst2"><a href="http://ain.ua">hello &lt;xyz&gt;</a></div><span></span></div>
-'div > p > a > {abc} | ul > li > a > {xyz} < li > a > {123}'
+div  >  .test.tst2>a@href="http://yandex.ru"$link>{hello <xyz>}<<span
+	<div><div class="test tst2"><a href="http://yandex.ru">hello &lt;xyz&gt;</a><span></span></div></div>
+> .test.tst2>a@href="http://ain.ua"$link>{hello <xyz>}<<span
+	<div><div class="test tst2"><a href="http://ain.ua">hello &lt;xyz&gt;</a><span></span></div></div>
+div > p > a > {abc} | ul > li > a > {xyz} <<< li > a > {123}
 	<div><p><a>abc</a></p></div>
 	<ul><li><a>xyz</a></li><li><a>123</a></li></ul>
-'select.optpage_urlblock-select@name=addingFlashSiteUrlSelector$select > option@value=allow > {tAllow} < option@value=deny > {tDeny}'
+select.optpage_urlblock-select@name=addingFlashSiteUrlSelector$select > option@value=allow > {tAllow} << option@value=deny > {tDeny}
 	<select class="optpage_urlblock-select" name="addingFlashSiteUrlSelector"><option value="allow">tAllow</option><option value="deny">tDeny</option></select>
-'> span.test, h2 > {abc} < span.test2'
+> span.test, h2 > {abc} << span.test2 
 	<div><span class="test"></span><h2>abc</h2><span class="test2"></span></div>
-
+div > {abc}, span > {link} << div > {xyz}
+	<div>abc<span>link</span><div>xyz</div></div>
+	
 Use quotes if you want escape converting symbols in attribute
 	href="http://yandex.ru"
 Use brackets if you want insert text nodes
@@ -46,11 +48,12 @@ function Fragment(template){
 		buf = this.parseNode(list[i+1].trim());	
 
 		if(list[i] == '>'){
-			this.current.appendChild(buf);
-			
-			if(!(buf instanceof Text)){
-				this.current = buf;
+			if(this.current instanceof Text){
+				this.current.parentNode.appendChild(buf)
+			}else{
+				this.current.appendChild(buf);
 			}
+			this.current = buf;
 		}else if(list[i][0] == '<'){
 			j = list[i].length;
 			while(j-- > 0 && this.current.parentNode){
@@ -63,7 +66,7 @@ function Fragment(template){
 			this.current = buf;
 		}else if(list[i] == '|'){
 			this.root.appendChild(buf);
-			this.current = (buf instanceof Text) ? this.root : buf;
+			this.current = buf;
 		}
 	}
 }

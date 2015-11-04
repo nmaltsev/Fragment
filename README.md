@@ -23,18 +23,18 @@ Ex. 2. Div is default first node
 ```
 Ex. 3. Use `|` to begin from root		
 ```
-'div > p > a > {abc} | ul > li > a > {xyz} < li > a > {123}'
+'div > p > a > {abc} | ul > li > a > {xyz} <<< li > a > {123}'
 	<div><p><a>abc</a></p></div>
 	<ul><li><a>xyz</a></li><li><a>123</a></li></ul>
 ```
 Ex. 4 Use `$` to aliase html element with object property
 ```
-'select.optpage_urlblock-select@name=addingFlashSiteUrlSelector$select > option@value=allow > {tAllow} < option@value=deny > {tDeny}'
+'select.optpage_urlblock-select@name=addingFlashSiteUrlSelector$select > option@value=allow > {tAllow} << option@value=deny > {tDeny}'
 	<select class="optpage_urlblock-select" name="addingFlashSiteUrlSelector"><option value="allow">tAllow</option><option value="deny">tDeny</option></select>
 ```
 Ex. 5. Use `,` for listening
 ``` 		
-'> span.test, h2 > {abc} < span.test2'
+'> span.test, h2 > {abc} << span.test2'
 	<div><span class="test"></span><h2>abc</h2><span class="test2"></span></div>
 ```
   
@@ -47,3 +47,4 @@ var node = doc.getNode();
 
 {Object} doc.bind - aliases on html elements
 ```
+

@@ -1,13 +1,15 @@
 [
 	'div  >  .test.tst2>a@href="http://yandex.ru"$link>{hello <xyz>}<<span',
 	' > .test.tst2>a@href="http://ain.ua"$link>{hello <xyz>}<<span',
-	'div > p > a > {abc} | ul > li > a > {xyz} << li > a > {123}',
+	'div > p > a > {abc} | ul > li > a > {xyz} <<< li > a > {123}',
 
 	'select.optpage_urlblock-select@name=addingFlashSiteUrlSelector$select > '+
-		'option@value=allow > {tAllow} < ' +
+		'option@value=allow > {tAllow} << ' +
 		'option@value=deny > {tDeny}',
 
-	'> span.test, h2 > {abc} < span.test2 '
+	'> span.test, h2 > {abc} << span.test2 ',
+
+	'div > {abc}, span > {link} << div > {xyz}',
 ].forEach(function(template){
 	console.log('Test: %s', template);
 	var doc = new Fragment(template);
