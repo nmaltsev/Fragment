@@ -1,33 +1,33 @@
-Fragment
+# Fragment
 =======
   
-Js lib to convert template at documentFragment.
+A js lib for transforming templates into  documentFragment instances.
     
 * It's compact;
-* It don't use innerHTML and plain text to create DOM;
+* It doesn't use innerHTML and plain text to create DOM;
 * Emmet like code style.
   
 You can use Fragment when you can't (or don't whant) change innerHTML property of html element.
   
-Syntax examples
+## examples
 --------------------
 Ex. 1 Use `>`  and `<` to change location
 ```
 'div  >  .test.tst2 > a@href="http://yandex.ru"$link > {hello <xyz>} < span'
 	<div><div class="test tst2"><a href="http://ain.ua">hello &lt;xyz&gt;</a></div><span></span></div>
 ```
-Ex. 2. Div is default first node
+Ex. 2. Div is a default first node
 ```
 '> .test.tst2>a@href="http://ain.ua"$link>{hello <xyz>}<span' 
 	<div><div class="test tst2"><a href="http://yandex.ru">hello &lt;xyz&gt;</a></div><span></span></div>
 ```
-Ex. 3. Use `|` to begin from root		
+Ex. 3. Use `|` to begin from the root node
 ```
 'div > p > a > {abc} | ul > li > a > {xyz} << li > a > {123}'
 	<div><p><a>abc</a></p></div>
 	<ul><li><a>xyz</a></li><li><a>123</a></li></ul>
 ```
-Ex. 4 Use `$` to aliase html element with object property
+Ex. 4 Use `$` to alias html element with object property
 ```
 'select.optpage_urlblock-select@name=addingFlashSiteUrlSelector$select > option@value=allow > {tAllow} < option@value=deny > {tDeny}'
 	<select class="optpage_urlblock-select" name="addingFlashSiteUrlSelector"><option value="allow">tAllow</option><option value="deny">tDeny</option></select>
