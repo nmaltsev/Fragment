@@ -18,14 +18,17 @@ interface IText extends IItem {
     text: string;
 }
 
-export function ast2jsx(ast: IRootNode){
-    return ast.children.map(function translateElement(element: IElement | IText):any {
+export function ast2jsx(ast: IRootNode): React.ReactNode[]{
+    return ast.children.map(function translateElement(element: IElement | IText, index: number): React.ReactNode {
         if (element.hasOwnProperty('text')) {
             return (element as IText).text;
         } 
         const el = element as IElement;
         // TODO translate HTML attributes into JSX attributes
-        const props:Record<string,string> = {...el.attrs};
+        const props:Record<string, string> = {
+            key: index + '',
+            ...el.attrs
+        };
         if (el.hasOwnProperty('id')) props['id'] = el.id;
         if (el.hasOwnProperty('classes')) props['className'] = el.classes.join(' ');
         
