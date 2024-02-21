@@ -39,7 +39,7 @@ export function ast2jsx(ast: IRootNode): React.ReactNode[]{
             ...rest_attrs
         };
         if (el.hasOwnProperty('id')) props['id'] = el.id;
-        if (el.hasOwnProperty('classes')) props['className'] = el.classes.join(' ');
+        if (el.hasOwnProperty('class')) props['className'] = el.classes.join(' ');
         if (style) {
             props['style'] = style.split(';').reduce(function(collection, keyvalue){
                 const [key, value]:[string, string|undefined] = splitPair(keyvalue);
