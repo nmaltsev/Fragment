@@ -39,7 +39,7 @@ export function ast2jsx(ast: IRootNode): React.ReactNode[]{
             ...rest_attrs
         };
         if (el.hasOwnProperty('id')) props['id'] = el.id;
-        if (el.hasOwnProperty('class')) props['className'] = el.classes.join(' ');
+        if (el.hasOwnProperty('classes') && el.classes.length > 0) props['className'] = el.classes.join(' ');
         if (style) {
             props['style'] = style.split(';').reduce(function(collection, keyvalue){
                 const [key, value]:[string, string|undefined] = splitPair(keyvalue);
@@ -52,8 +52,15 @@ export function ast2jsx(ast: IRootNode): React.ReactNode[]{
         return React.createElement(el.tag || 'div', props, ...el.children.map(translateElement))
     })
 }
-export function emmet2jsx(content: string) {
-    const ast = parseAST(content);
+export function emmet2jsx(content: string, replacements?:Record<string, string>) {
+    let _content = content;
+    if (replacements) {
+        let keys = Object.keys(replacements), i = keys.length;
+        while(i--> 0) {
+            _content = _content.replace('{' + keys[i] + '}', replacements[keys[i]]);
+        }
+    }
+    const ast = parseAST(_content);
     return ast2jsx(ast);
 }
 

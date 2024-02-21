@@ -1,10 +1,11 @@
 import {parseAST} from './parser.mjs';
+import {ast2json} from './ast2json.mjs';
 
 const snippets = [
-    // `h2>"header"
-    // | p>"Text 
-    // abc",a@href="https://argans.eu">"Argans"
-    // `,
+    `h2>"header"
+    | p>"Text 
+    abc",a@href="https://argans.eu">"Argans"
+    `,
     `
     "simple text" , a#abc.vbtn.__primary@href="http://argans.eu/?v=1" > "Read more" < "Next:"
     |h1.test#news>"Hello world!"
@@ -16,14 +17,14 @@ const snippets = [
     ul > 
     li > "Territory 1: Valencia, Spain;" <
     li > "Territory 2 : Bucharest, Romania;<"
-    `
+    `,
+    '"By "<a@href="{url}">"{name}"<", on {date}"'
 ];
 
 snippets.forEach(function(snippet, index){
     const ast = parseAST(snippet)
     console.log('\n\nTest #%s', index);
-    console.dir(ast)
-    console.dir(ast.children[1])
-
-
-})
+    // console.dir(ast)
+    // console.dir(ast2json(ast))
+    console.log(JSON.stringify(ast2json(ast), null, '\t'));
+});

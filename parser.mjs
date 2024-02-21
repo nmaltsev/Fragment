@@ -38,7 +38,7 @@ export function parseAST(snippet){
                     if(node) root = node;
                 }
                 else if (char === '<') {
-                    root = root.parent;
+                    root = root.parent || out;
                 }
                 else if (char === ',') {
                     // do nothing
@@ -73,69 +73,69 @@ const ATTR_TYPE = {
     aliasName: 5
 }
 const ATTR_OPERATORS = ['#','.','@', '$']
-function parseTag(litter, parent) {
-    if (litter[0] === '"') {
-        return {
-            text: litter.substr(1, litter.length - 2),
-            parent
-        };
-    }
-    return {
-        children: [],
-        tag: litter,
-        parent
-    }
-}
 // function parseTag(litter, parent) {
 //     if (litter[0] === '"') {
 //         return {
 //             text: litter.substr(1, litter.length - 2),
-//             // type: ITEM_TYPE.text,
 //             parent
 //         };
 //     }
-//     const node = {
+//     return {
 //         children: [],
-//         tag: 'div',
-//         id: undefined,
-//         alias: undefined,
-//         attrs: {},
-//         classes: [],
+//         tag: litter,
 //         parent
 //     }
-//     let opId = ATTR_TYPE.tagName;
-//     let buf = '';
-//     let isLitter = false;
-//     for(let i=0,len=litter.length,char;char=litter[i],i<len;i++){
-//         if (char === '"') {
-//             isLitter = !isLitter;
-//             continue;
-//         }
-//         if (ATTR_OPERATORS.indexOf(char) > -1 && !isLitter) { // is an operator
-//             parseAttribute(node, opId, buf);   
-//             buf = '';
-
-//             if (char === '.') {
-//                 opId = ATTR_TYPE.className;
-//             }
-//             else if (char === '#') {
-//                 opId = ATTR_TYPE.id;
-//             }
-//             else if (char === '$') {
-//                 opId = ATTR_TYPE.aliasName
-//             }
-//             else if (char === '@') {
-//                 opId = ATTR_TYPE.attribute;
-//             }
-//         } else {
-//             buf += char;
-//         }
-//     }
-//     if (buf.length > 0) {
-//         parseAttribute(node, opId, buf);
-//     }
-//     return node;
 // }
+function parseTag(litter, parent) {
+    if (litter[0] === '"') {
+        return {
+            text: litter.substr(1, litter.length - 2),
+            // type: ITEM_TYPE.text,
+            parent
+        };
+    }
+    const node = {
+        children: [],
+        tag: 'div',
+        id: undefined,
+        alias: undefined,
+        attrs: {},
+        classes: [],
+        parent
+    }
+    let opId = ATTR_TYPE.tagName;
+    let buf = '';
+    let isLitter = false;
+    for(let i=0,len=litter.length,char;char=litter[i],i<len;i++){
+        if (char === '"') {
+            isLitter = !isLitter;
+            continue;
+        }
+        if (ATTR_OPERATORS.indexOf(char) > -1 && !isLitter) { // is an operator
+            parseAttribute(node, opId, buf);   
+            buf = '';
+
+            if (char === '.') {
+                opId = ATTR_TYPE.className;
+            }
+            else if (char === '#') {
+                opId = ATTR_TYPE.id;
+            }
+            else if (char === '$') {
+                opId = ATTR_TYPE.aliasName
+            }
+            else if (char === '@') {
+                opId = ATTR_TYPE.attribute;
+            }
+        } else {
+            buf += char;
+        }
+    }
+    if (buf.length > 0) {
+        parseAttribute(node, opId, buf);
+    }
+    return node;
+}
 function parseAttribute(node, opId, buf) {
     if (opId === ATTR_TYPE.tagName) {
         node.tag = buf;
