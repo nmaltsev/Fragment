@@ -12,12 +12,12 @@ export function parseAST(snippet){
         }
         if (isLiteral) {
             buffer += char;
-            if (char === '"') {
+            if (char === '"' && (snippet[i-1] != '\\')) {
                 isLiteral = !isLiteral;
             }
             continue;
         } else {
-            if (char === '"') {
+            if (char === '"' && (snippet[i-1] != '\\')) {
                 isLiteral = !isLiteral;
                 buffer += char;
                 continue;
@@ -73,23 +73,10 @@ const ATTR_TYPE = {
     aliasName: 5
 }
 const ATTR_OPERATORS = ['#','.','@', '$']
-// function parseTag(litter, parent) {
-//     if (litter[0] === '"') {
-//         return {
-//             text: litter.substr(1, litter.length - 2),
-//             parent
-//         };
-//     }
-//     return {
-//         children: [],
-//         tag: litter,
-//         parent
-//     }
-// }
 function parseTag(litter, parent) {
     if (litter[0] === '"') {
         return {
-            text: litter.substr(1, litter.length - 2),
+            text: litter.substr(1, litter.length - 2).replaceAll('\\"', '"'),
             // type: ITEM_TYPE.text,
             parent
         };
@@ -164,4 +151,3 @@ function parseLitter(string) {
     }
     return string;
 }
-

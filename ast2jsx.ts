@@ -25,10 +25,16 @@ function splitPair(pair:string): [string, string|undefined] {
     return [key, value];
 }
 type ReactStyle = Record<string, string|undefined>;
+function handleHtmlSpecialCharacters(line: string){
+    if (line.indexOf('&') < 0) {
+        return line;
+    }
+    return line.split(/(&[^;]*;)/g).map((part, i) => i%2 ? React.createElement('span', {dangerouslySetInnerHTML: {__html:part}, key:part}): part);
+}
 export function ast2jsx(ast: IRootNode): React.ReactNode[]{
     return ast.children.map(function translateElement(element: IElement | IText, index: number): React.ReactNode {
         if (element.hasOwnProperty('text')) {
-            return (element as IText).text;
+            return handleHtmlSpecialCharacters((element as IText).text);
         } 
         const el = element as IElement;
         const {style, ...rest_attrs} = el.attrs;
@@ -57,7 +63,7 @@ export function emmet2jsx(content: string, replacements?:Record<string, string>)
     if (replacements) {
         let keys = Object.keys(replacements), i = keys.length;
         while(i--> 0) {
-            _content = _content.replace('{' + keys[i] + '}', replacements[keys[i]]);
+            _content = _content.replaceAll('{' + keys[i] + '}', replacements[keys[i]]);
         }
     }
     const ast = parseAST(_content);

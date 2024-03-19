@@ -18,13 +18,14 @@ const snippets = [
     li > "Territory 1: Valencia, Spain;" <
     li > "Territory 2 : Bucharest, Romania;<"
     `,
-    '"By "<a@href="{url}">"{name}"<", on {date}"'
+    '"By "<a@href="{url}">"{name}"<", on {date}"',
+    "p>\"text\",i>\"\\\"abc\\\"\""
 ];
 
 snippets.forEach(function(snippet, index){
     const ast = parseAST(snippet)
-    console.log('\n\nTest #%s', index);
-    // console.dir(ast)
+    console.log('\n\nTest #%s ', index);
+    console.log(snippet)
     // console.dir(ast2json(ast))
     console.log(JSON.stringify(ast2json(ast), null, '\t'));
 });
