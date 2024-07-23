@@ -32,21 +32,19 @@ export function parseAST(str) {
         if (activeRull) {
             const isModal = activeRull.start == activeRull.end;
 
-            if (isModal) {
+            if (isModal && (activeRull.end == last1 || activeRull.end == last2 || activeRull.end == last3)) {
                 // "..."
-                if (activeRull.end == last1 || activeRull.end == last2 || activeRull.end == last3) {
-                    slice = str.substring(pos, i);
-                    pos = i+1; // TODO
-                    // on end: push slice into activeRull
-                    console.log('End %s p:%s, SL %s', activeRull.id, i, slice)
-                    activeRull = rullStack.pop();    
-                }    
+                slice = str.substring(pos, i);
+                pos = i + 1; // TODO
+                // on end: push slice into activeRull
+                console.log('End1 %s p:%s, SL %s', activeRull.id, i, slice)
+                activeRull = rullStack.pop();    
             } else if(startingRull) {
                 rullStack.push(activeRull);
                 // TODO on start: push slice into activeRull 
                 
                 slice = str.substring(pos, i);
-                pos = i+1; // TODO
+                pos = i + 1; // TODO
                 
                 activeRull = startingRull;
                 console.log('Start %s p:%s SL %s', activeRull.id, i, slice)
@@ -54,7 +52,7 @@ export function parseAST(str) {
                 if (activeRull.end == last1 || activeRull.end == last2 || activeRull.end == last3) {
                     slice = str.substring(pos, i);
                     pos = i+1; // TODO
-                    console.log('End %s p:%s SL %s', activeRull.id, i, slice)
+                    console.log('End2 %s p:%s SL %s', activeRull.id, i, slice)
                     activeRull = rullStack.pop();    
                 }
             }
